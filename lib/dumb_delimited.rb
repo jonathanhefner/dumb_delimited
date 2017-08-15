@@ -92,9 +92,7 @@ module DumbDelimited::ClassMethods
   #
   # @example
   #   Point = DumbDelimited[:x, :y, :z]
-  #   p = Point.parse_line("1,2,3")
-  #   p.is_a?(Point)  # == true
-  #   p.to_a          # == [1, 2, 3]
+  #   Point.parse_line("1,2,3")  # == Point.new(1, 2, 3)
   #
   # @param line [String]
   # @return [self]
@@ -114,8 +112,12 @@ module DumbDelimited::ClassMethods
   #   # 7,8,9
   #
   #   Point = DumbDelimited[:x, :y, :z]
-  #   points = Point.parse_file("points.csv")
-  #   points.map(&:x)  # == [1, 4, 7]
+  #   Point.parse_file("points.csv")
+  #     # == [
+  #     #      Point.new(1, 2, 3),
+  #     #      Point.new(4, 5, 6),
+  #     #      Point.new(7, 8, 9)
+  #     #    ]
   #
   # @param path [String, Pathname]
   # @return [Array<self>]
