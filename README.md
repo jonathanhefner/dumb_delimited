@@ -27,8 +27,8 @@ Bob Bobbington|best_bob@bobbers.bob|808 Bounce Lane, Austin, TX 78703
 ```
 
 To interact with these files, we create model classes via the
-`DumbDelimited#[]` method.  Note that a created class can either be used
-as a superclass or simply assigned to a constant.
+`DumbDelimited::[]` method.  Note that a created class can either be
+used as a superclass or simply assigned to a constant.
 
 ```ruby
 class Product < DumbDelimited[:sku, :name, :base_price, :sale_price]
@@ -79,10 +79,10 @@ end
 
 Let's say the sale is now over, and we want to change our sale prices
 back to our base prices.  *dumb_delimited* includes the
-[*pleasant_path*](https://github.com/jonathanhefner/pleasant_path) gem,
-which offers a fluent API for writing files.  To finish our task, we use
-the `Array#write_to_file` method provided by *pleasant_path*, which in
-turn invokes `Product#to_s` (provided by *dumb_delimited*) on each model
+[*pleasant_path*](https://rubygems.org/gems/pleasant_path) gem, which
+offers a fluent API for writing files.  To finish our task, we use the
+`Array#write_to_file` method provided by *pleasant_path*, which in turn
+invokes `Product#to_s` (provided by *dumb_delimited*) on each model
 object.
 
 ```ruby
@@ -97,10 +97,20 @@ For a more detailed explanation of the *dumb_delimited* API, browse the
 
 ## Installation
 
-    $ gem install dumb_delimited
+Install from [Ruby Gems](https://rubygems.org/gems/dumb_delimited):
+
+```bash
+$ gem install dumb_delimited
+```
+
+Then require in your Ruby script:
+
+```ruby
+require "dumb_delimited"
+```
 
 
-## Development
+## Contributing
 
 Run `rake test` to run the tests.  You can also run `rake irb` for an
 interactive prompt that pre-loads the project code.
@@ -108,4 +118,4 @@ interactive prompt that pre-loads the project code.
 
 ## License
 
-[MIT License](http://opensource.org/licenses/MIT)
+[MIT License](https://opensource.org/licenses/MIT)
