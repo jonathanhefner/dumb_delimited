@@ -23,6 +23,16 @@ class DumbDelimitedTest < Minitest::Test
     assert_hash_and_row_match hash, row_again
   end
 
+  def test_text_round_trip
+    hashes = 3.times.map{|i| make_hash(i) }
+    rows = hashes.map{|h| make_row_from_hash(h) }
+
+    text = rows.join("\n")
+    rows_again = Row.parse_text(text)
+
+    assert_hashes_and_rows_match hashes, rows_again
+  end
+
   def test_file_round_trip
     make_hashes_then_write_to_file_then do |hashes, path|
       rows_again = Row.parse_file(path)
