@@ -176,4 +176,26 @@ module DumbDelimited::InstanceMethods
     CSV.generate_line(self, self.class.options).chomp!
   end
 
+  # Serializes a model object to a delimited string, using the delimiter
+  # specified by {ClassMethods.delimiter}, and appends the string plus a
+  # row separator to the specified file.  Returns the model object.
+  # This method is convenient when working with single model objects,
+  # for example, appending a single entry to a log file.  However, it is
+  # not recommended for use with an array of model objects, due to the
+  # overhead of opening and closing the file for each append.
+  #
+  # @example
+  #   Point = DumbDelimited[:x, :y, :z]
+  #   Point.new(1, 2, 3).append_to_file("out.txt")  # == Point.new(1, 2, 3)
+  #   File.read("out.txt")                          # == "1,2,3\n"
+  #   Point.new(4, 5, 6).append_to_file("out.txt")  # == Point.new(4, 5, 6)
+  #   File.read("out.txt")                          # == "1,2,3\n4,5,6\n"
+  #
+  # @param file [String, Pathname]
+  # @return [self]
+  def append_to_file(file)
+    CSV.generate_line(self, self.class.options).append_to_file(file)
+    self
+  end
+
 end

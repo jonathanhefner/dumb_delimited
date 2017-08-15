@@ -81,6 +81,21 @@ class DumbDelimitedTest < Minitest::Test
     Row.delimiter = default_delimiter # restore
   end
 
+  def test_append_to_file
+    hashes = 3.times.map{|i| make_hash(i) }
+    rows = hashes.map{|h| make_row_from_hash(h) }
+
+    Dir.mktmpdir do |dir|
+      all_at_once = dir / 'all_at_once'
+      one_by_one = dir / 'one_by_one'
+
+      rows.write_to_file(all_at_once)
+      rows.each{|r| r.append_to_file(one_by_one) }
+
+      assert_equal File.read(all_at_once), File.read(one_by_one)
+    end
+  end
+
 
   private
 
