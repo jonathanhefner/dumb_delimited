@@ -1,6 +1,6 @@
 require "CSV"
 require "pleasant_path"
-require "dumb_delimited/version"
+require_relative "dumb_delimited/version"
 
 
 module DumbDelimited
