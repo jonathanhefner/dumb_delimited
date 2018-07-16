@@ -1,4 +1,4 @@
-require "CSV"
+require "csv"
 require "pleasant_path"
 require_relative "dumb_delimited/version"
 
