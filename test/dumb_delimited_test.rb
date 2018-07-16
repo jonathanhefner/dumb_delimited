@@ -2,6 +2,10 @@ require "test_helper"
 
 class DumbDelimitedTest < Minitest::Test
 
+  def setup
+    Row.options[:col_sep] = ","
+  end
+
   def test_that_it_has_a_version_number
     refute_nil ::DumbDelimited::VERSION
   end
@@ -16,9 +20,7 @@ class DumbDelimitedTest < Minitest::Test
   def test_line_round_trip
     hash = make_hash
     row = make_row_from_hash(hash)
-
-    line = row.to_s
-    row_again = Row.parse_line(line)
+    row_again = Row.parse_line(row.to_s)
 
     assert_hash_and_row_match hash, row_again
   end
@@ -26,9 +28,7 @@ class DumbDelimitedTest < Minitest::Test
   def test_text_round_trip
     hashes = 3.times.map{|i| make_hash(i) }
     rows = hashes.map{|h| make_row_from_hash(h) }
-
-    text = rows.join("\n")
-    rows_again = Row.parse_text(text)
+    rows_again = Row.parse_text(rows.join("\n"))
 
     assert_hashes_and_rows_match hashes, rows_again
   end
@@ -62,23 +62,21 @@ class DumbDelimitedTest < Minitest::Test
     end
   end
 
-  def test_different_delimiter
-    default_delimiter = Row.delimiter # save
+  def test_delimiter_attribute
+    Row.delimiter = "expected"
+    assert_equal "expected", Row.delimiter
+  end
 
-    delimiter = "!ARBITRARY!"
-    Row.delimiter = delimiter
-    assert_equal delimiter, Row.delimiter
-
+  def test_arbitrary_delimiter
+    Row.delimiter = "!ARBITRARY!"
     hash = make_hash
     row = make_row_from_hash(hash)
 
     line = row.to_s
+    assert_equal (COLUMNS.length - 1), line.scan(Row.delimiter).length
+
     row_again = Row.parse_line(line)
-
-    assert_equal (COLUMNS.length - 1), line.scan(delimiter).length
     assert_hash_and_row_match hash, row_again
-
-    Row.delimiter = default_delimiter # restore
   end
 
   def test_append_to_file
