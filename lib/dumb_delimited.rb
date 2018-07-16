@@ -45,7 +45,7 @@ module DumbDelimited::ClassMethods
   # @return [Hash]
   def options
     @options ||= {
-      col_sep: ',',
+      col_sep: ",",
       skip_blanks: true,
       converters: :numeric,
     }

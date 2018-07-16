@@ -65,7 +65,7 @@ class DumbDelimitedTest < Minitest::Test
   def test_different_delimiter
     default_delimiter = Row.delimiter # save
 
-    delimiter = '!ARBITRARY!'
+    delimiter = "!ARBITRARY!"
     Row.delimiter = delimiter
     assert_equal delimiter, Row.delimiter
 
@@ -86,8 +86,8 @@ class DumbDelimitedTest < Minitest::Test
     rows = hashes.map{|h| make_row_from_hash(h) }
 
     Dir.mktmpdir do |dir|
-      all_at_once = dir / 'all_at_once'
-      one_by_one = dir / 'one_by_one'
+      all_at_once = dir.to_pathname + "all_at_once"
+      one_by_one = dir.to_pathname + "one_by_one"
 
       rows.write_to_file(all_at_once)
       rows.each{|r| r.append_to_file(one_by_one) }
@@ -115,7 +115,7 @@ class DumbDelimitedTest < Minitest::Test
 
   def make_hashes_then_write_to_file_then(&block)
     Dir.mktmpdir do |dir|
-      path = dir / 'file'
+      path = dir.to_pathname + "file"
       hashes = 13.times.map{|i| make_hash(i) }
       rows = hashes.map{|h| make_row_from_hash(h) }
       rows.write_to_file(path)
