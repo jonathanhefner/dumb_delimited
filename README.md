@@ -53,13 +53,13 @@ products = Product.parse_file("products.csv")
 customers = Customer.parse_file("customers.psv")
 ```
 
-This, however, will load the entire contents of each file into memory.
+However, this will load the entire contents of each file into memory.
 Let's say our customers file is very large, and we would prefer to
-iterate over it rather than load it all into memory at once.  To do so,
-we can use the `each_in_file` method that the model class provides.
-Below is a complete example in which we load our product data, create a
-listing of products on sale, and iterate over our customers, notifying
-each customer of the sale products:
+iterate over it one row at a time rather than load it all into memory at
+once.  To do so, we can use the `each_in_file` method.  Below is a
+complete example in which we load our product data, create a listing of
+products on sale, and iterate over our customers, notifying each
+customer of the sale products:
 
 ```ruby
 products = Product.parse_file("products.csv")
@@ -69,9 +69,13 @@ listing = products.select(&:on_sale?).map do |product|
 end.join("\n")
 
 Customer.each_in_file("customers.psv") do |customer|
-  message =
-    "Hi #{customer.name}!\n\n" \
-    "The following products are on sale:\n\n#{listing}"
+  message = <<~MESSAGE
+    Hi #{customer.name}!
+
+    The following products are on sale:
+
+    #{listing}
+  MESSAGE
 
   notify(customer.email, message)
 end
@@ -92,7 +96,7 @@ end.write_to_file("products.csv")
 ```
 
 For a more detailed explanation of the *dumb_delimited* API, browse the
-[full documentation](http://www.rubydoc.info/gems/dumb_delimited/).
+[API documentation](http://www.rubydoc.info/gems/dumb_delimited/).
 
 
 ## Installation
