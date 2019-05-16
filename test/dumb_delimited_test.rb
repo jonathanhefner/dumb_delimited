@@ -68,7 +68,7 @@ class DumbDelimitedTest < Minitest::Test
   end
 
   def test_arbitrary_delimiter
-    Row.delimiter = "!ARBITRARY!"
+    Row.delimiter = "!@#$%"
     hash = make_hash
     row = make_row_from_hash(hash)
 
