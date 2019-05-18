@@ -50,6 +50,7 @@ module DumbDelimited::ClassMethods
     @options ||= if superclass == Struct
       CSV::DEFAULT_OPTIONS.merge(
         skip_blanks: true,
+        liberal_parsing: true,
         converters: :numeric,
       )
     else

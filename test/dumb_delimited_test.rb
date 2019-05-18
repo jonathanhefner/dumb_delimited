@@ -39,6 +39,7 @@ class DumbDelimitedTest < Minitest::Test
   def test_options_defaults
     assert_equal ",", Row.options[:col_sep]
     assert_equal true, Row.options[:skip_blanks]
+    assert_equal true, Row.options[:liberal_parsing]
     assert_equal :numeric, Row.options[:converters]
   end
 
