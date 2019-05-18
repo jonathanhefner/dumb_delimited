@@ -47,10 +47,14 @@ module DumbDelimited::ClassMethods
   #
   # @return [Hash<Symbol, Object>]
   def options
-    @options ||= CSV::DEFAULT_OPTIONS.merge(
-      skip_blanks: true,
-      converters: :numeric,
-    )
+    @options ||= if superclass == Struct
+      CSV::DEFAULT_OPTIONS.merge(
+        skip_blanks: true,
+        converters: :numeric,
+      )
+    else
+      superclass.options.dup
+    end
   end
 
   # Sets the CSV options Hash.  The entire Hash is replaced, and the new

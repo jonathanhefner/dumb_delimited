@@ -55,6 +55,20 @@ class DumbDelimitedTest < Minitest::Test
     refute_equal "#{__method__}", Row.options[:col_sep]
   end
 
+  def test_options_are_inherited
+    Row.options[:col_sep] = "#{__method__}"
+    subclass = Class.new(Row)
+
+    assert_equal "#{__method__}", subclass.options[:col_sep]
+  end
+
+  def test_options_mutations_in_subclass_are_isolated
+    subclass = Class.new(Row)
+    subclass.options[:col_sep] = "#{__method__}"
+
+    refute_equal "#{__method__}", Row.options[:col_sep]
+  end
+
   def test_options_cover_csv_default_options
     assert_equal CSV::DEFAULT_OPTIONS.keys, (CSV::DEFAULT_OPTIONS.keys & Row.options.keys)
   end
