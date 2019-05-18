@@ -47,11 +47,10 @@ module DumbDelimited::ClassMethods
   #
   # @return [Hash<Symbol, Object>]
   def options
-    @options ||= {
-      col_sep: ",",
+    @options ||= CSV::DEFAULT_OPTIONS.merge(
       skip_blanks: true,
       converters: :numeric,
-    }
+    )
   end
 
   # Sets the CSV options Hash.  The entire Hash is replaced, and the new

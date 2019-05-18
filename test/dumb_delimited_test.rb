@@ -55,6 +55,10 @@ class DumbDelimitedTest < Minitest::Test
     refute_equal "#{__method__}", Row.options[:col_sep]
   end
 
+  def test_options_cover_csv_default_options
+    assert_equal CSV::DEFAULT_OPTIONS.keys, (CSV::DEFAULT_OPTIONS.keys & Row.options.keys)
+  end
+
   def test_delimiter_attribute
     Row.delimiter = "#{__method__}"
 
