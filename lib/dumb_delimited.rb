@@ -147,7 +147,7 @@ module DumbDelimited::ClassMethods
   #   # 7,8,9
   #
   #   Point = DumbDelimited[:x, :y, :z]
-  #   Point.parse_file("points.csv")
+  #   Point.read("points.csv")
   #     # == [
   #     #      Point.new(1, 2, 3),
   #     #      Point.new(4, 5, 6),
@@ -156,9 +156,11 @@ module DumbDelimited::ClassMethods
   #
   # @param path [String, Pathname]
   # @return [Array<Struct>]
-  def parse_file(path)
+  def read(path)
     each_in_file(path).to_a
   end
+
+  alias_method :parse_file, :read
 
   # Parses a file one line at a time, yielding a model object for each
   # line.  This avoids loading the entire contents of the file into

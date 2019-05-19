@@ -49,8 +49,8 @@ IO operations for that model class.
 Now we can read each flat file, and recieve an array of model objects.
 
 ```ruby
-products = Product.parse_file("products.csv")
-customers = Customer.parse_file("customers.psv")
+products = Product.read("products.csv")
+customers = Customer.read("customers.psv")
 ```
 
 However, this will load the entire contents of each file into memory.
@@ -62,7 +62,7 @@ products on sale, and iterate over our customers, notifying each
 customer of the sale products:
 
 ```ruby
-products = Product.parse_file("products.csv")
+products = Product.read("products.csv")
 
 listing = products.select(&:on_sale?).map do |product|
   "* #{product.name} (#{product.sale_price})"
@@ -90,7 +90,7 @@ invokes `Product#to_s` (provided by *dumb_delimited*) on each model
 object.
 
 ```ruby
-Product.parse_file("products.csv").each do |product|
+Product.read("products.csv").each do |product|
   product.sale_price = product.base_price
 end.write_to_file("products.csv")
 ```

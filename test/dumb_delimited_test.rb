@@ -112,13 +112,17 @@ class DumbDelimitedTest < Minitest::Test
     assert_equal :parse, Row.method(:parse_text).original_name
   end
 
-  def test_parse_file
+  def test_read
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
     with_various_delimiters do
       write_rows_then(rows) do |path|
-        assert_equal rows, Row.parse_file(path)
+        assert_equal rows, Row.read(path)
       end
     end
+  end
+
+  def test_parse_file_aliases_read
+    assert_equal :read, Row.method(:parse_file).original_name
   end
 
   def test_each_in_file_with_block
