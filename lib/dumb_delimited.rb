@@ -114,24 +114,26 @@ module DumbDelimited::ClassMethods
     self.new(*CSV.parse_line(line, self.options))
   end
 
-  # Parses a string into an array of model objects.
+  # Parses a string or IO object into an array of model objects.
   #
   # @example
   #   Point = DumbDelimited[:x, :y, :z]
-  #   Point.parse_text("1,2,3\n4,5,6\n7,8,9\n")
+  #   Point.parse("1,2,3\n4,5,6\n7,8,9\n")
   #     # == [
   #     #      Point.new(1, 2, 3),
   #     #      Point.new(4, 5, 6),
   #     #      Point.new(7, 8, 9)
   #     #    ]
   #
-  # @param text [String]
+  # @param data [String, IO]
   # @return [Array<Struct>]
-  def parse_text(text)
+  def parse(data)
     # using CSV.new.each instead of CSV.parse to avoid unnecessary mass
     # memory allocation and deallocation
-    CSV.new(text, self.options).each.map{|row| self.new(*row) }
+    CSV.new(data, self.options).each.map{|row| self.new(*row) }
   end
+
+  alias_method :parse_text, :parse
 
   # Parses a file into an array of model objects.  This will load the
   # entire contents of the file into memory, and may not be suitable for

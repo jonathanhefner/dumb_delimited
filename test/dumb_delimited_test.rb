@@ -100,11 +100,16 @@ class DumbDelimitedTest < Minitest::Test
     end
   end
 
-  def test_parse_text
+  def test_parse
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
     with_various_delimiters do
-      assert_equal rows, Row.parse_text(rows.join("\n"))
+      assert_equal rows, Row.parse(rows.join("\n"))
+      assert_equal rows, Row.parse(StringIO.new(rows.join("\n")))
     end
+  end
+
+  def test_parse_text_aliases_parse
+    assert_equal :parse, Row.method(:parse_text).original_name
   end
 
   def test_parse_file
