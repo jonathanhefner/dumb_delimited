@@ -138,7 +138,7 @@ module DumbDelimited::ClassMethods
   # Parses a file into an array of model objects.  This will load the
   # entire contents of the file into memory, and may not be suitable for
   # large files.  To iterate over file contents without loading it all
-  # into memory at once, use {each_in_file}.
+  # into memory at once, use {read_each}.
   #
   # @example
   #   # CONTENTS OF FILE "points.csv":
@@ -157,7 +157,7 @@ module DumbDelimited::ClassMethods
   # @param path [String, Pathname]
   # @return [Array<Struct>]
   def read(path)
-    each_in_file(path).to_a
+    read_each(path).to_a
   end
 
   alias_method :parse_file, :read
@@ -170,15 +170,15 @@ module DumbDelimited::ClassMethods
   # Enumerator methods, such as +Enumerator#to_a+, can cause the entire
   # contents of the file to be loaded into memory.
   #
-  # @overload each_in_file(path, &block)
+  # @overload read_each(path, &block)
   #   @param path [String, Pathname]
   #   @yieldparam model [Struct]
   #   @return [void]
   #
-  # @overload each_in_file(path)
+  # @overload read_each(path)
   #   @param path [String, Pathname]
   #   @return [Enumerator<Struct>]
-  def each_in_file(path)
+  def read_each(path)
     return to_enum(__method__, path) unless block_given?
 
     CSV.foreach(path, self.options) do |row|

@@ -56,10 +56,10 @@ customers = Customer.read("customers.psv")
 However, this will load the entire contents of each file into memory.
 Let's say our customers file is very large, and we would prefer to
 iterate over it one row at a time rather than load it all into memory at
-once.  To do so, we can use the `each_in_file` method.  Below is a
-complete example in which we load our product data, create a listing of
-products on sale, and iterate over our customers, notifying each
-customer of the sale products:
+once.  To do so, we can use the `read_each` method.  Below is a complete
+example in which we load our product data, create a listing of products
+on sale, and iterate over our customers, notifying each customer of the
+sale products:
 
 ```ruby
 products = Product.read("products.csv")
@@ -68,7 +68,7 @@ listing = products.select(&:on_sale?).map do |product|
   "* #{product.name} (#{product.sale_price})"
 end.join("\n")
 
-Customer.each_in_file("customers.psv") do |customer|
+Customer.read_each("customers.psv") do |customer|
   message = <<~MESSAGE
     Hi #{customer.name}!
 

@@ -125,12 +125,12 @@ class DumbDelimitedTest < Minitest::Test
     assert_equal :read, Row.method(:parse_file).original_name
   end
 
-  def test_each_in_file_with_block
+  def test_read_each_with_block
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
     with_various_delimiters do
       write_rows_then(rows) do |path|
         each_rows = []
-        Row.each_in_file(path) do |row|
+        Row.read_each(path) do |row|
           each_rows << row
         end
 
@@ -139,11 +139,11 @@ class DumbDelimitedTest < Minitest::Test
     end
   end
 
-  def test_each_in_file_without_block
+  def test_read_each_without_block
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
     with_various_delimiters do
       write_rows_then(rows) do |path|
-        enum = Row.each_in_file(path)
+        enum = Row.read_each(path)
 
         assert enum.is_a?(Enumerable)
         assert_equal rows, enum.to_a
