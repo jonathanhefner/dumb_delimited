@@ -111,7 +111,7 @@ module DumbDelimited::ClassMethods
   # @param line [String]
   # @return [Struct]
   def parse_line(line)
-    self.new(*CSV.parse_line(line, self.options))
+    parse_each(line).first
   end
 
   # Parses a string or IO object into an array of model objects.
@@ -128,12 +128,31 @@ module DumbDelimited::ClassMethods
   # @param data [String, IO]
   # @return [Array<Struct>]
   def parse(data)
-    # using CSV.new.each instead of CSV.parse to avoid unnecessary mass
-    # memory allocation and deallocation
-    CSV.new(data, self.options).each.map{|row| self.new(*row) }
+    parse_each(data).to_a
   end
 
   alias_method :parse_text, :parse
+
+  # Parses a string or IO object one line at a time, yielding a model
+  # object for each line.
+  #
+  # An Enumerator is returned if no block is given.
+  #
+  # @overload parse_each(data, &block)
+  #   @param data [String, IO]
+  #   @yieldparam model [Struct]
+  #   @return [void]
+  #
+  # @overload parse_each(data)
+  #   @param data [String, IO]
+  #   @return [Enumerator<Struct>]
+  def parse_each(data)
+    return to_enum(__method__, data) unless block_given?
+
+    CSV.new(data, self.options).each do |row|
+      yield self.new(*row)
+    end
+  end
 
   # Parses a file into an array of model objects.  This will load the
   # entire contents of the file into memory, and may not be suitable for

@@ -112,6 +112,32 @@ class DumbDelimitedTest < Minitest::Test
     assert_equal :parse, Row.method(:parse_text).original_name
   end
 
+  def test_parse_each_with_block
+    rows = (1..3).map{|id| Row.new(*make_values(id)) }
+    with_various_delimiters do
+      [String, StringIO].each do |data_class|
+        each_rows = []
+        Row.parse_each(data_class.new(rows.join("\n"))) do |row|
+          each_rows << row
+        end
+
+        assert_equal rows, each_rows
+      end
+    end
+  end
+
+  def test_parse_each_without_block
+    rows = (1..3).map{|id| Row.new(*make_values(id)) }
+    with_various_delimiters do
+      [String, StringIO].each do |data_class|
+        enum = Row.parse_each(data_class.new(rows.join("\n")))
+
+        assert enum.is_a?(Enumerable)
+        assert_equal rows, enum.to_a
+      end
+    end
+  end
+
   def test_read
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
     with_various_delimiters do
