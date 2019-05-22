@@ -229,23 +229,6 @@ class DumbDelimitedTest < Minitest::Test
     end
   end
 
-  def test_append_to_file
-    Dir.mktmpdir do |dir|
-      all_at_once = dir.to_pathname + "all_at_once"
-      one_by_one = dir.to_pathname + "one_by_one"
-
-      rows = (1..3).map{|id| Row.new(*make_values(id)) }
-      with_various_options do
-        rows.write_to_file(all_at_once)
-        rows.each{|row| row.append_to_file(one_by_one) }
-
-        assert_equal File.read(all_at_once), File.read(one_by_one)
-      ensure
-        File.delete(one_by_one)
-      end
-    end
-  end
-
   private
 
   COLUMNS = [:a, :b, :c]
