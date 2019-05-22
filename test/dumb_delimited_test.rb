@@ -212,6 +212,23 @@ class DumbDelimitedTest < Minitest::Test
     end
   end
 
+  def test_append
+    rows = (1..3).map{|id| Row.new(*make_values(id)) }
+    with_tmp_file do |path|
+      with_various_options do
+        Row.append(path, rows)
+
+        assert_equal to_csv(rows), File.read(path)
+
+        Row.append(path, rows)
+
+        assert_equal to_csv(rows + rows), File.read(path)
+      ensure
+        File.delete(path)
+      end
+    end
+  end
+
   def test_append_to_file
     Dir.mktmpdir do |dir|
       all_at_once = dir.to_pathname + "all_at_once"

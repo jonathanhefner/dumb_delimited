@@ -227,6 +227,16 @@ module DumbDelimited::ClassMethods
     end
   end
 
+  # Appends a collection of model objects to a file in delimited format.
+  # Convenience shortcut for {write} with +append: true+.
+  #
+  # @param path [String, Pathname]
+  # @param models [Enumerable<Struct>]
+  # @return [void]
+  def append(path, models)
+    write(path, models, append: true)
+  end
+
   private
 
   def csv_each(csv, &block)
