@@ -83,7 +83,7 @@ class DumbDelimitedTest < Minitest::Test
 
   def test_to_s
     values = make_values("foo")
-    with_various_delimiters do
+    with_various_options do
       [nil, false, true].each do |eol|
         line = Row.new(*values).to_s(*eol)
 
@@ -98,16 +98,16 @@ class DumbDelimitedTest < Minitest::Test
 
   def test_parse_line
     row = Row.new(*make_values("foo"))
-    with_various_delimiters do
-      assert_equal row, Row.parse_line(row.to_s)
+    with_various_options do
+      assert_equal row, Row.parse_line(to_csv([row]))
     end
   end
 
   def test_parse
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
-    with_various_delimiters do
-      assert_equal rows, Row.parse(rows.join("\n"))
-      assert_equal rows, Row.parse(StringIO.new(rows.join("\n")))
+    with_various_options do
+      assert_equal rows, Row.parse(to_csv(rows))
+      assert_equal rows, Row.parse(StringIO.new(to_csv(rows)))
     end
   end
 
@@ -117,10 +117,10 @@ class DumbDelimitedTest < Minitest::Test
 
   def test_parse_each_with_block
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
-    with_various_delimiters do
+    with_various_options do
       [String, StringIO].each do |data_class|
         each_rows = []
-        Row.parse_each(data_class.new(rows.join("\n"))) do |row|
+        Row.parse_each(data_class.new(to_csv(rows))) do |row|
           each_rows << row
         end
 
@@ -131,9 +131,9 @@ class DumbDelimitedTest < Minitest::Test
 
   def test_parse_each_without_block
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
-    with_various_delimiters do
+    with_various_options do
       [String, StringIO].each do |data_class|
-        enum = Row.parse_each(data_class.new(rows.join("\n")))
+        enum = Row.parse_each(data_class.new(to_csv(rows)))
 
         assert enum.is_a?(Enumerable)
         assert_equal rows, enum.to_a
@@ -143,8 +143,8 @@ class DumbDelimitedTest < Minitest::Test
 
   def test_read
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
-    with_various_delimiters do
-      write_rows_then(rows) do |path|
+    with_various_options do
+      write_csv_then(rows) do |path|
         assert_equal rows, Row.read(path)
       end
     end
@@ -156,8 +156,8 @@ class DumbDelimitedTest < Minitest::Test
 
   def test_read_each_with_block
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
-    with_various_delimiters do
-      write_rows_then(rows) do |path|
+    with_various_options do
+      write_csv_then(rows) do |path|
         each_rows = []
         Row.read_each(path) do |row|
           each_rows << row
@@ -170,8 +170,8 @@ class DumbDelimitedTest < Minitest::Test
 
   def test_read_each_without_block
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
-    with_various_delimiters do
-      write_rows_then(rows) do |path|
+    with_various_options do
+      write_csv_then(rows) do |path|
         enum = Row.read_each(path)
 
         assert enum.is_a?(Enumerable)
@@ -186,7 +186,7 @@ class DumbDelimitedTest < Minitest::Test
       one_by_one = dir.to_pathname + "one_by_one"
 
       rows = (1..3).map{|id| Row.new(*make_values(id)) }
-      with_various_delimiters do
+      with_various_options do
         rows.write_to_file(all_at_once)
         rows.each{|row| row.append_to_file(one_by_one) }
 
@@ -207,17 +207,39 @@ class DumbDelimitedTest < Minitest::Test
     COLUMNS.map{|col| "row_#{id}_col_#{col}" }
   end
 
-  def with_various_delimiters(&block)
-    [nil, "\t", "!@#$%"].each do |delimiter|
-      Row.delimiter = delimiter if delimiter
-      block.call
+  def with_various_options(&block)
+    block.call
+
+    Row.delimiter = "\t"
+    block.call
+
+    Row.delimiter = "!@#$%"
+    block.call
+
+    Row.options[:headers] = COLUMNS
+    block.call
+
+    Row.options[:headers] = true
+    Row.options[:write_headers] = true
+    block.call
+  end
+
+  def to_csv(rows)
+    CSV.generate(Row.options) do |csv|
+      if Row.options[:write_headers] && !Row.options[:headers].is_a?(Array)
+        csv << COLUMNS
+      end
+
+      rows.each do |row|
+        csv << row.to_a
+      end
     end
   end
 
-  def write_rows_then(rows, &block)
+  def write_csv_then(rows, &block)
     Dir.mktmpdir do |dir|
       path = dir.to_pathname + "file"
-      rows.write_to_file(path)
+      File.write(path, to_csv(rows))
       block.call(path)
     end
   end

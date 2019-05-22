@@ -146,12 +146,10 @@ module DumbDelimited::ClassMethods
   # @overload parse_each(data)
   #   @param data [String, IO]
   #   @return [Enumerator<Struct>]
-  def parse_each(data)
+  def parse_each(data, &block)
     return to_enum(__method__, data) unless block_given?
 
-    CSV.new(data, self.options).each do |row|
-      yield self.new(*row)
-    end
+    csv_each(CSV.new(data, self.options), &block)
   end
 
   # Parses a file into an array of model objects.  This will load the
@@ -197,11 +195,20 @@ module DumbDelimited::ClassMethods
   # @overload read_each(path)
   #   @param path [String, Pathname]
   #   @return [Enumerator<Struct>]
-  def read_each(path)
+  def read_each(path, &block)
     return to_enum(__method__, path) unless block_given?
 
-    CSV.foreach(path, self.options) do |row|
-      yield self.new(*row)
+    CSV.open(path, self.options) do |csv|
+      csv_each(csv, &block)
+    end
+  end
+
+  private
+
+  def csv_each(csv, &block)
+    csv.each do |row|
+      row = row.fields if row.is_a?(CSV::Row)
+      block.call(self.new(*row))
     end
   end
 
@@ -221,7 +228,7 @@ module DumbDelimited::InstanceMethods
   def to_s(eol = false)
     row_sep = eol ? self.class.options[:row_sep] : -""
 
-    CSV.generate(**self.class.options, row_sep: row_sep) do |csv|
+    CSV.generate(**self.class.options, row_sep: row_sep, write_headers: false) do |csv|
       csv << self
     end
   end
