@@ -211,16 +211,25 @@ end
 module DumbDelimited::InstanceMethods
 
   # Serializes a model object to a delimited string, using the delimiter
-  # specified by {ClassMethods#delimiter}.
+  # specified by {ClassMethods#delimiter}.  By default, the string will
+  # not end with a line terminator.  To end the string with a line
+  # terminator designated by +:row_sep+ in {ClassMethods#options}, set
+  # +eol+ to true.
   #
+  # @param eol [Boolean]
   # @return [String]
-  def to_s
-    CSV.generate_line(self, self.class.options).chomp!
+  def to_s(eol = false)
+    row_sep = eol ? self.class.options[:row_sep] : -""
+
+    CSV.generate(**self.class.options, row_sep: row_sep) do |csv|
+      csv << self
+    end
   end
 
   # Serializes a model object to a delimited string, using the delimiter
   # specified by {ClassMethods#delimiter}, and appends the string plus a
-  # row separator to the specified file.  Returns the model object.
+  # line terminator designated by +:row_sep+ in {ClassMethods#options}
+  # to the specified file.  Returns the model object.
   #
   # This method is convenient when working with single model objects.
   # For example, when appending a single entry to a log file.  However,
@@ -237,7 +246,7 @@ module DumbDelimited::InstanceMethods
   # @param file [String, Pathname]
   # @return [Struct]
   def append_to_file(file)
-    CSV.generate_line(self, self.class.options).append_to_file(file)
+    to_s(true).append_to_file(file)
     self
   end
 

@@ -84,11 +84,14 @@ class DumbDelimitedTest < Minitest::Test
   def test_to_s
     values = make_values("foo")
     with_various_delimiters do
-      line = Row.new(*values).to_s
+      [nil, false, true].each do |eol|
+        line = Row.new(*values).to_s(*eol)
 
-      assert_equal (COLUMNS.length - 1), line.scan(Row.delimiter).length
-      values.each do |value|
-        assert_includes line, value
+        assert_equal (COLUMNS.length - 1), line.scan(Row.delimiter).length
+        values.each do |value|
+          assert_includes line, value
+        end
+        assert_equal !!eol, line.end_with?($INPUT_RECORD_SEPARATOR)
       end
     end
   end
