@@ -203,6 +203,30 @@ module DumbDelimited::ClassMethods
     end
   end
 
+  # Writes a collection of model objects to a file in delimited format.
+  # The previous contents of the file are overwritten, unless +append+
+  # is set to true.
+  #
+  # Column headers are written to the file if +:write_headers+ in
+  # {options} is set to true *and* either +append+ is false or the file
+  # is empty / non-existent.  The column headers will be derived from
+  # either the value of +:headers+ in {options} if it is an Array, or
+  # otherwise from the columns defined by the model.
+  #
+  # @param path [String, Pathname]
+  # @param models [Enumerable<Struct>]
+  # @param append [Boolean]
+  # @return [void]
+  def write(path, models, append: false)
+    mode = append ? "a" : "w"
+    write_headers = options[:write_headers] && !(append && File.exist?(path) && File.size(path) > 0)
+    headers = (!options[:headers].is_a?(Array) && write_headers) ? members : options[:headers]
+
+    CSV.open(path, mode, **options, write_headers: write_headers, headers: headers) do |csv|
+      models.each{|model| csv << model }
+    end
+  end
+
   private
 
   def csv_each(csv, &block)

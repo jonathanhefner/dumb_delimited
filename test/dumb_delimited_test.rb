@@ -143,8 +143,10 @@ class DumbDelimitedTest < Minitest::Test
 
   def test_read
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
-    with_various_options do
-      write_csv_then(rows) do |path|
+    with_tmp_file do |path|
+      with_various_options do
+        File.write(path, to_csv(rows))
+
         assert_equal rows, Row.read(path)
       end
     end
@@ -156,8 +158,9 @@ class DumbDelimitedTest < Minitest::Test
 
   def test_read_each_with_block
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
-    with_various_options do
-      write_csv_then(rows) do |path|
+    with_tmp_file do |path|
+      with_various_options do
+        File.write(path, to_csv(rows))
         each_rows = []
         Row.read_each(path) do |row|
           each_rows << row
@@ -170,12 +173,41 @@ class DumbDelimitedTest < Minitest::Test
 
   def test_read_each_without_block
     rows = (1..3).map{|id| Row.new(*make_values(id)) }
-    with_various_options do
-      write_csv_then(rows) do |path|
+    with_tmp_file do |path|
+      with_various_options do
+        File.write(path, to_csv(rows))
         enum = Row.read_each(path)
 
         assert enum.is_a?(Enumerable)
         assert_equal rows, enum.to_a
+      end
+    end
+  end
+
+  def test_write
+    rows = (1..3).map{|id| Row.new(*make_values(id)) }
+    with_tmp_file do |path|
+      with_various_options do
+        Row.write(path, rows)
+
+        assert_equal to_csv(rows), File.read(path)
+      end
+    end
+  end
+
+  def test_write_with_append
+    rows = (1..3).map{|id| Row.new(*make_values(id)) }
+    with_tmp_file do |path|
+      with_various_options do
+        Row.write(path, rows, append: true)
+
+        assert_equal to_csv(rows), File.read(path)
+
+        Row.write(path, rows, append: true)
+
+        assert_equal to_csv(rows + rows), File.read(path)
+      ensure
+        File.delete(path)
       end
     end
   end
@@ -236,11 +268,9 @@ class DumbDelimitedTest < Minitest::Test
     end
   end
 
-  def write_csv_then(rows, &block)
+  def with_tmp_file(&block)
     Dir.mktmpdir do |dir|
-      path = dir.to_pathname + "file"
-      File.write(path, to_csv(rows))
-      block.call(path)
+      block.call(File.join(dir, "file"))
     end
   end
 

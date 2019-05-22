@@ -82,17 +82,17 @@ end
 ```
 
 Let's say the sale is now over, and we want to change our sale prices
-back to our base prices.  *dumb_delimited* includes the
-[*pleasant_path*](https://rubygems.org/gems/pleasant_path) gem, which
-offers a fluent API for writing files.  To finish our task, we use the
-`Array#write_to_file` method provided by *pleasant_path*, which in turn
-invokes `Product#to_s` (provided by *dumb_delimited*) on each model
-object.
+back to our base prices.  We can load our product data, modify it
+directly, and finally persist it back with the `write` method:
 
 ```ruby
-Product.read("products.csv").each do |product|
+products = Product.read("products.csv")
+
+products.each do |product|
   product.sale_price = product.base_price
-end.write_to_file("products.csv")
+end
+
+Product.write("products.csv", products)
 ```
 
 For a more detailed explanation of the *dumb_delimited* API, browse the
