@@ -31,6 +31,67 @@ module DumbDelimited
     end
   end
 
+  # Convenience shortcut to create a model class and set
+  # {ClassMethods#delimiter} to +","+.
+  #
+  # Note: This method exists mostly for parity with {psv} and {tsv}.
+  # Unless +CSV::DEFAULT_OPTIONS+ has been modified, the delimiter will
+  # already default to +","+.
+  #
+  # @example
+  #   # This...
+  #   Point = DumbDelimited.csv(:x, :y, :z)
+  #
+  #   # ...is equivalent to:
+  #   Point = DumbDelimited[:x, :y, :z]
+  #   Point.delimiter = ","
+  #
+  # @param columns [Array<Symbol>]
+  # @return [Class<Struct>]
+  def self.csv(*columns)
+    klass = self[*columns]
+    klass.delimiter = ","
+    klass
+  end
+
+  # Convenience shortcut to create a model class and set
+  # {ClassMethods#delimiter} to +"|"+.
+  #
+  # @example
+  #   # This...
+  #   Point = DumbDelimited.psv(:x, :y, :z)
+  #
+  #   # ...is equivalent to:
+  #   Point = DumbDelimited[:x, :y, :z]
+  #   Point.delimiter = "|"
+  #
+  # @param columns [Array<Symbol>]
+  # @return [Class<Struct>]
+  def self.psv(*columns)
+    klass = self[*columns]
+    klass.delimiter = "|"
+    klass
+  end
+
+  # Convenience shortcut to create a model class and set
+  # {ClassMethods#delimiter} to <code>"\t"</code>.
+  #
+  # @example
+  #   # This...
+  #   Point = DumbDelimited.tsv(:x, :y, :z)
+  #
+  #   # ...is equivalent to:
+  #   Point = DumbDelimited[:x, :y, :z]
+  #   Point.delimiter = "\t"
+  #
+  # @param columns [Array<Symbol>]
+  # @return [Class<Struct>]
+  def self.tsv(*columns)
+    klass = self[*columns]
+    klass.delimiter = "\t"
+    klass
+  end
+
 end
 
 

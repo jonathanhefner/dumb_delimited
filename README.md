@@ -42,11 +42,21 @@ Customer.delimiter = "|"
 ```
 
 Because "customers.psv" is pipe-delimited, we also set the delimiter
-for the Customer class.  By default, model classes use comma (`","`) as
-the delimiter.  Whenever a delimiter is set, it applies to all future
+for the Customer class.  By default, a model class uses a comma (`","`)
+as its delimiter.  Whenever a delimiter is set, it applies to all future
 IO operations for that model class.
 
-Now we can read each flat file, and recieve an array of model objects.
+Convenience shortcuts that create a model class and set its delimiter
+are also provided for a few common delimiters.  Notably,
+`DumbDelimited::psv` for a model class with a pipe (`"|"`) delimiter.
+Thus, the `Customer` class could alternatively be written as:
+
+```ruby
+Customer = DumbDelimited.psv(:name, :email, :address)
+```
+
+Using our model classes, we can read each flat file, and recieve an
+array of model objects:
 
 ```ruby
 products = Product.read("products.csv")

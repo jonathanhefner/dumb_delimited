@@ -22,6 +22,16 @@ class DumbDelimitedTest < Minitest::Test
     assert_equal COLUMNS, Row.members
   end
 
+  def test_delimiter_convenience_shortcuts
+    { csv: ",", psv: "|", tsv: "\t" }.each do |shortcut, delimiter|
+      klass = DumbDelimited.send(shortcut, *COLUMNS)
+
+      assert_kind_of Struct, klass.new
+      assert_equal COLUMNS, klass.members
+      assert_equal delimiter, klass.options[:col_sep]
+    end
+  end
+
   def test_initializer
     values = make_values("foo")
     row = Row.new(*values)
