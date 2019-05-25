@@ -15,7 +15,7 @@ module DumbDelimited
   # @example
   #   class Product < DumbDelimited[:sku, :name, :base_price, :sale_price]
   #     def on_sale?
-  #       sale_price < base_price
+  #       sale_price.to_f < base_price.to_f
   #     end
   #   end
   #
@@ -111,7 +111,6 @@ module DumbDelimited::ClassMethods
       CSV::DEFAULT_OPTIONS.merge(
         skip_blanks: true,
         liberal_parsing: true,
-        converters: :numeric,
       )
     else
       superclass.options.dup

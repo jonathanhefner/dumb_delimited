@@ -33,7 +33,7 @@ used as a superclass or simply assigned to a constant.
 ```ruby
 class Product < DumbDelimited[:sku, :name, :base_price, :sale_price]
   def on_sale?
-    sale_price < base_price
+    sale_price.to_f < base_price.to_f
   end
 end
 
