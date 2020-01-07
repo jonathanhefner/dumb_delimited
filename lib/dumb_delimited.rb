@@ -208,7 +208,7 @@ module DumbDelimited::ClassMethods
   def parse_each(data, &block)
     return to_enum(__method__, data) unless block_given?
 
-    csv_each(CSV.new(data, self.options), &block)
+    csv_each(CSV.new(data, **self.options), &block)
   end
 
   # Parses a file into an array of model objects.  This will load the
@@ -257,7 +257,7 @@ module DumbDelimited::ClassMethods
   def read_each(path, &block)
     return to_enum(__method__, path) unless block_given?
 
-    CSV.open(path, self.options) do |csv|
+    CSV.open(path, **self.options) do |csv|
       csv_each(csv, &block)
     end
   end

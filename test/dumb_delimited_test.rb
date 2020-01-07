@@ -266,7 +266,7 @@ class DumbDelimitedTest < Minitest::Test
   end
 
   def to_csv(rows)
-    CSV.generate(Row.options) do |csv|
+    CSV.generate(**Row.options) do |csv|
       if Row.options[:write_headers] && !Row.options[:headers].is_a?(Array)
         csv << COLUMNS
       end
