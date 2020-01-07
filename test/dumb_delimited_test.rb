@@ -215,7 +215,7 @@ class DumbDelimitedTest < Minitest::Test
         Row.write(path, rows, append: true)
 
         assert_equal to_csv(rows + rows), File.read(path)
-      ensure
+
         File.delete(path)
       end
     end
@@ -232,7 +232,7 @@ class DumbDelimitedTest < Minitest::Test
         Row.append(path, rows)
 
         assert_equal to_csv(rows + rows), File.read(path)
-      ensure
+
         File.delete(path)
       end
     end
