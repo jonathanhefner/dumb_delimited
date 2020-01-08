@@ -6,10 +6,10 @@ module DumbDelimited
 
   # Returns a model class for delimited data consisting of the specified
   # +columns+.  The returned class inherits from Ruby's
-  # {https://docs.ruby-lang.org/en/trunk/Struct.html +Struct+}, allowing
-  # data manipulation via accessor methods, via indexing by column name,
-  # and via indexing by column number.  See {ClassMethods} and
-  # {InstanceMethods} for the additional methods the returned class
+  # {https://docs.ruby-lang.org/en/master/Struct.html +Struct+},
+  # allowing data manipulation via accessor methods, via indexing by
+  # column name, and via indexing by column number.  See {ClassMethods}
+  # and {InstanceMethods} for the additional methods the returned class
   # provides.
   #
   # @example
@@ -102,7 +102,7 @@ module DumbDelimited::ClassMethods
   # IO operations for the model class.
   #
   # For detailed information about available options, see Ruby's
-  # {https://docs.ruby-lang.org/en/trunk/CSV.html#method-c-new CSV
+  # {https://docs.ruby-lang.org/en/master/CSV.html#method-c-new CSV
   # class}.
   #
   # @return [Hash<Symbol, Object>]
@@ -122,7 +122,7 @@ module DumbDelimited::ClassMethods
   # class.  To set options individually, see {options}.
   #
   # For detailed information about available options, see Ruby's
-  # {https://docs.ruby-lang.org/en/trunk/CSV.html#method-c-new CSV
+  # {https://docs.ruby-lang.org/en/master/CSV.html#method-c-new CSV
   # class}.
   #
   # @param opts [Hash<Symbol, Object>]
