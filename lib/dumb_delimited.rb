@@ -97,7 +97,7 @@ end
 
 module DumbDelimited::ClassMethods
 
-  # Returns the CSV options Hash.  The Hash is not +dup+ed and can be
+  # Returns the CSV options Hash.  The Hash is not +dup+'d and can be
   # modified directly.  Any modifications will be applied to all future
   # IO operations for the model class.
   #
@@ -105,7 +105,7 @@ module DumbDelimited::ClassMethods
   # {https://docs.ruby-lang.org/en/master/CSV.html#method-c-new CSV
   # class}.
   #
-  # @return [Hash<Symbol, Object>]
+  # @return [Hash{Symbol => Object}]
   def options
     @options ||= if superclass == Struct
       CSV::DEFAULT_OPTIONS.merge(
@@ -125,8 +125,8 @@ module DumbDelimited::ClassMethods
   # {https://docs.ruby-lang.org/en/master/CSV.html#method-c-new CSV
   # class}.
   #
-  # @param opts [Hash<Symbol, Object>]
-  # @return [Hash<Symbol, Object>]
+  # @param opts [Hash{Symbol => Object}]
+  # @return [opts]
   def options=(opts)
     @options = opts
   end
@@ -156,7 +156,7 @@ module DumbDelimited::ClassMethods
   #   p.to_s  # == "1|2|3"
   #
   # @param delim [String]
-  # @return [String]
+  # @return [delim]
   def delimiter=(delim)
     self.options[:col_sep] = delim
   end
@@ -195,7 +195,7 @@ module DumbDelimited::ClassMethods
   # Parses a string or IO object one line at a time, yielding a model
   # object for each line.
   #
-  # An Enumerator is returned if no block is given.
+  # If no block is given, an Enumerator is returned instead.
   #
   # @overload parse_each(data, &block)
   #   @param data [String, IO]
@@ -242,9 +242,9 @@ module DumbDelimited::ClassMethods
   # line.  This avoids loading the entire contents of the file into
   # memory at once.
   #
-  # An Enumerator is returned if no block is given.  Note that some
-  # Enumerator methods, such as +Enumerator#to_a+, can cause the entire
-  # contents of the file to be loaded into memory.
+  # If no block is given, an Enumerator is returned instead.  Note that
+  # some Enumerator methods, such as +Enumerator#to_a+, can cause the
+  # entire contents of the file to be loaded into memory.
   #
   # @overload read_each(path, &block)
   #   @param path [String, Pathname]
