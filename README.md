@@ -111,13 +111,13 @@ For a more detailed explanation of the *dumb_delimited* API, browse the
 
 ## Installation
 
-Install from [Ruby Gems](https://rubygems.org/gems/dumb_delimited):
+Install the [gem](https://rubygems.org/gems/dumb_delimited):
 
 ```bash
 $ gem install dumb_delimited
 ```
 
-Then require in your Ruby script:
+Then require in your Ruby code:
 
 ```ruby
 require "dumb_delimited"
