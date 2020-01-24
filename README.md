@@ -106,7 +106,7 @@ Product.write("products.csv", products)
 ```
 
 For a more detailed explanation of the *dumb_delimited* API, browse the
-[API documentation](http://www.rubydoc.info/gems/dumb_delimited/).
+[API documentation](https://www.rubydoc.info/gems/dumb_delimited/).
 
 
 ## Installation
