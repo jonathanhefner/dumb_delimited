@@ -1,4 +1,4 @@
-# dumb_delimited [![Build Status](https://travis-ci.org/jonathanhefner/dumb_delimited.svg?branch=master)](https://travis-ci.org/jonathanhefner/dumb_delimited)
+# dumb_delimited
 
 A library for unsophisticated delimited flat file IO.  *dumb_delimited*
 mixes models and persistence in that "probably wrong but feels so right"
