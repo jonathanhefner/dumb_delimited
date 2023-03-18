@@ -111,17 +111,7 @@ For a more detailed explanation of the *dumb_delimited* API, browse the
 
 ## Installation
 
-Install the [gem](https://rubygems.org/gems/dumb_delimited):
-
-```bash
-$ gem install dumb_delimited
-```
-
-Then require in your Ruby code:
-
-```ruby
-require "dumb_delimited"
-```
+Install the [`dumb_delimited` gem](https://rubygems.org/gems/dumb_delimited).
 
 
 ## Contributing
