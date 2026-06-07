@@ -55,7 +55,7 @@ Thus, the `Customer` class could alternatively be written as:
 Customer = DumbDelimited.psv(:name, :email, :address)
 ```
 
-Using our model classes, we can read each flat file, and recieve an
+Using our model classes, we can read each flat file, and receive an
 array of model objects:
 
 ```ruby
