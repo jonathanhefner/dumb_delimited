@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Jonathan Hefner"]
   spec.email         = ["jonathan@hefner.pro"]
 
-  spec.summary       = %q{Library for unsophisticated delimited flat file IO}
+  spec.summary       = %q{Unsophisticated delimited flat file IO}
   spec.homepage      = "https://github.com/jonathanhefner/dumb_delimited"
   spec.license       = "MIT"
   spec.required_ruby_version = ">= 3.4"
