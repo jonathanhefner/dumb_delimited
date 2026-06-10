@@ -1,6 +1,6 @@
 # dumb_delimited
 
-A library for unsophisticated delimited flat file IO.  *dumb_delimited*
+A library for unsophisticated delimited flat file IO.  `dumb_delimited`
 mixes models and persistence in that "probably wrong but feels so right"
 kind of way.
 
@@ -105,7 +105,7 @@ end
 Product.write("products.csv", products)
 ```
 
-For a more detailed explanation of the *dumb_delimited* API, browse the
+For a more detailed explanation of the `dumb_delimited` API, browse the
 [API documentation](https://www.rubydoc.info/gems/dumb_delimited/).
 
 
