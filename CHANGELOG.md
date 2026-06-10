@@ -1,3 +1,9 @@
+## 3.0.0
+
+* [BREAKING] Drop support for Ruby < 3.4
+* Fix CSV keyword-argument compatibility
+
+
 ## 2.0.0
 
 * [BREAKING] Do not activate `options[:converters]` by default
